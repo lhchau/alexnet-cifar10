@@ -1,7 +1,8 @@
 import torch
 import os
+import wandb
 
-def train_one_epoch(dataloader, model, loss_fn, optimizer, device, batch_size):
+def train_one_epoch(dataloader, model, loss_fn, optimizer, device, batch_size, log_dict):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
     # Set the model to training mode - important for batch normalization and dropout layers
@@ -29,9 +30,11 @@ def train_one_epoch(dataloader, model, loss_fn, optimizer, device, batch_size):
     train_loss /= num_batches
     acc /= size
     print(f"Training: \n Accuracy: {(100*acc):>0.1f}%, Avg loss: {train_loss:>8f} \n")
+    log_dict['train/loss'] = train_loss
+    log_dict['train/acc'] = 100*acc
 
 
-def validation_one_epoch(epoch, dataloader, model, loss_fn, device, current_time, best_acc):
+def validation_one_epoch(epoch, dataloader, model, loss_fn, device, current_time, best_acc, log_dict):
     # Set the model to evaluation mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices
     model.eval()
@@ -66,6 +69,8 @@ def validation_one_epoch(epoch, dataloader, model, loss_fn, device, current_time
     val_loss /= num_batches
     acc /= size
     print(f"Validation: \n Accuracy: {(100*acc):>0.1f}%, Avg loss: {val_loss:>8f} \n")
+    log_dict['val/loss'] = val_loss
+    log_dict['val/acc'] = 100*acc
     
     return best_acc
     
@@ -95,3 +100,7 @@ def test_one_epoch(dataloader, model, loss_fn, device, current_time):
     test_loss /= num_batches
     correct /= size
     print(f"Test: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    wandb({
+        'test/loss': test_loss,
+        'test/acc': 100*correct
+    })

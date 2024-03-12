@@ -78,6 +78,10 @@ def get_dataloader(
         )
         
         return train_dataloader, val_dataloader, test_dataloader, classes
+    elif data == 'mnist':   
+        pass
+    elif data =='cifar100':
+        pass
     else:
         raise ValueError("Only support options: cifar10")
     

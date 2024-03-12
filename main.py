@@ -4,10 +4,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import datetime
+import yaml
+import argparse
+import wandb
 
-from utils.train_one_epoch import *
-from dataloader.get_dataloader import *
-from model.alexnet import *
+from utils import *
+from dataloader import *
+from model import *
 
 current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -16,19 +19,25 @@ current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 ################################
 best_acc = 0
 
-cfg = {
-    'batch_size': 128,
-    'num_workers': 4,
-    'epochs': 200,
-    'learning_rate': 1e-3,
-    'weight_decay': 0.0
-}
+parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
+parser.add_argument('--experiment', type=str, help='path to YAML config file')
+args = parser.parse_args()
+
+yaml_filepath = os.path.join(".", "config", f"{args.experiment}.yaml")
+with open(yaml_filepath, "r") as yamlfile:
+    cfg = yaml.load(yamlfile, Loader=yaml.Loader)
+
+wandb.init(
+    project=cfg['data_name'], 
+    name=f"{cfg['model_name']}-bs{cfg['batch_size']}-lr{cfg['learning_rate']}-wd{cfg['weight_decay']}", 
+)
+log_dict = {}
 
 ################################
 #### 1. BUILD THE DATASET
 ################################
 train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(
-    data='cifar10', 
+    data=cfg['data_name'], 
     data_augmentation='basic', 
     batch_size=cfg['batch_size'], 
     num_workers=cfg['num_workers']
@@ -37,7 +46,8 @@ train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(
 ################################
 #### 2. BUILD THE NEURAL NETWORK
 ################################
-model = AlexNet(
+model = get_model(
+    name=cfg['model_name'], 
     num_classes=len(classes)
 )
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -65,7 +75,8 @@ if __name__ == '__main__':
             loss_fn=loss_fn, 
             optimizer=optimizer, 
             device=device, 
-            batch_size=cfg['batch_size']
+            batch_size=cfg['batch_size'],
+            log_dict=log_dict
         )
         
         best_acc = validation_one_epoch(
@@ -75,8 +86,11 @@ if __name__ == '__main__':
             loss_fn=loss_fn,
             device=device,
             current_time=current_time,
-            best_acc=best_acc
+            best_acc=best_acc,
+            log_dict=log_dict
         )
+        
+        wandb.log(log_dict)
     test_one_epoch(
         dataloader=test_dataloader, 
         model=model, 
@@ -84,9 +98,9 @@ if __name__ == '__main__':
         device=device,
         current_time=current_time
     )
-
+    
     ################################
-    #### 3.d Testing on each class
+    #### 3.c Testing on each class
     ################################
     class_correct = list(0. for _ in range(len(classes)))
     class_total = list(0. for _ in range(len(classes)))
