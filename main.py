@@ -22,7 +22,7 @@ cfg = {
     'batch_size': 128,
     'epochs': 200,
     'learning_rate': 1e-3,
-    'lambda_l2': 0.0
+    'weight_decay': 0.0
 }
 
 ################################
@@ -50,7 +50,8 @@ model.to(device)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.SGD(
     model.parameters(), 
-    lr=cfg['learning_rate']
+    lr=cfg['learning_rate'],
+    weight_decay=cfg['weight_decay']
 )
 
 ################################
