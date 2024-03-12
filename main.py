@@ -18,6 +18,7 @@ best_acc = 0
 
 cfg = {
     'batch_size': 128,
+    'num_workers': 4,
     'epochs': 200,
     'learning_rate': 1e-3,
     'weight_decay': 0.0
@@ -29,8 +30,8 @@ cfg = {
 train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(
     data='cifar10', 
     data_augmentation='basic', 
-    batch_size=128, 
-    num_workers=4
+    batch_size=cfg['batch_size'], 
+    num_workers=cfg['num_workers']
 )
 
 ################################
