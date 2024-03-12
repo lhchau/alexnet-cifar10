@@ -5,8 +5,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 import datetime
 
-from tqdm import tqdm
-
 from utils.train_one_epoch import *
 from dataloader.get_dataloader import *
 from model.alexnet import *
