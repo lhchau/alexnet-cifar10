@@ -1,6 +1,6 @@
 import torch
 import os
-import wandb
+
 
 def train_one_epoch(dataloader, model, loss_fn, optimizer, device, batch_size, log_dict):
     size = len(dataloader.dataset)
@@ -74,7 +74,7 @@ def validation_one_epoch(epoch, dataloader, model, loss_fn, device, current_time
     
     return best_acc
     
-def test_one_epoch(dataloader, model, loss_fn, device, current_time):
+def test_one_epoch(dataloader, model, loss_fn, device, current_time, log_dict):
     # Set the model to evaluation mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices
     print('==> Resuming from best checkpoint..')
@@ -100,7 +100,5 @@ def test_one_epoch(dataloader, model, loss_fn, device, current_time):
     test_loss /= num_batches
     correct /= size
     print(f"Test: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-    wandb({
-        'test/loss': test_loss,
-        'test/acc': 100*correct
-    })
+    log_dict['test/loss'] = test_loss
+    log_dict['test/acc'] = 100*correct

@@ -32,7 +32,7 @@ wandb.init(
     name=f"{cfg['model_name']}-bs={cfg['batch_size']}-lr={cfg['learning_rate']}-wd={cfg['weight_decay']}-aug={cfg['data_augmentation_type']}-act={cfg['activation']}", 
 )
 log_dict = {}
-
+test_dict = {}
 ################################
 #### 1. BUILD THE DATASET
 ################################
@@ -92,13 +92,17 @@ if __name__ == '__main__':
         )
         
         wandb.log(log_dict)
+        
     test_one_epoch(
         dataloader=test_dataloader, 
         model=model, 
         loss_fn=loss_fn,
         device=device,
-        current_time=current_time
+        current_time=current_time,
+        log_dict=test_dict
     )
+    
+    wandb.log(test_dict)
 
     ################################
     #### 3.c Testing on each class
