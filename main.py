@@ -29,7 +29,7 @@ with open(yaml_filepath, "r") as yamlfile:
 
 wandb.init(
     project=cfg['data_name'], 
-    name=f"{cfg['model_name']}-bs{cfg['batch_size']}-lr{cfg['learning_rate']}-wd{cfg['weight_decay']}", 
+    name=f"{cfg['model_name']}-bs={cfg['batch_size']}-lr={cfg['learning_rate']}-wd={cfg['weight_decay']}-aug={cfg['data_augmentation_type']}-act={cfg['activation']}", 
 )
 log_dict = {}
 
@@ -38,7 +38,7 @@ log_dict = {}
 ################################
 train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(
     data=cfg['data_name'], 
-    data_augmentation='basic', 
+    data_augmentation=cfg['data_augmentation_type'], 
     batch_size=cfg['batch_size'], 
     num_workers=cfg['num_workers']
 )
@@ -48,7 +48,8 @@ train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(
 ################################
 model = get_model(
     name=cfg['model_name'], 
-    num_classes=len(classes)
+    num_classes=len(classes),
+    activation=cfg['activation']
 )
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
@@ -98,7 +99,7 @@ if __name__ == '__main__':
         device=device,
         current_time=current_time
     )
-    
+
     ################################
     #### 3.c Testing on each class
     ################################
