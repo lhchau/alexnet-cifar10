@@ -4,6 +4,6 @@ num_workers: 4
 epochs: 200
 learning_rate: 0.001
 weight_decay: 0.0
-model_name: 'alexnet'
-data_augmentation_type: 'sota'
+model_name: 'alexnet_minimal'
+data_augmentation_type: 'minimal'
 activation: 'relu'

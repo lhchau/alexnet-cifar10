@@ -40,6 +40,23 @@ def get_cifar10(
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), 
         ])
+    elif data_augmentation == 'minimal': # State of The Art
+        transform_train = transforms.Compose([
+            transforms.Resize(40),
+            transforms.RandomCrop(32),
+            transforms.RandomHorizontalFlip(),  # Randomly flip the image horizontally
+            transforms.RandomVerticalFlip(),    # Randomly flip the image vertically
+            transforms.RandomRotation(degrees=30),  # Randomly rotate the image up to 30 degrees
+            transforms.ColorJitter(brightness=0.2),  # Randomly adjust brightness with a factor of 0.2
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), 
+        ])
+        transform_test = transforms.Compose([
+            transforms.Resize(40),
+            transforms.CenterCrop(32),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), 
+        ])
     else:
         raise ValueError("Only support options: basic or sota")
     
