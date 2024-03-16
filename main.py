@@ -33,6 +33,7 @@ wandb.init(
 )
 log_dict = {}
 test_dict = {}
+
 ################################
 #### 1. BUILD THE DATASET
 ################################
@@ -49,7 +50,8 @@ train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(
 model = get_model(
     name=cfg['model_name'], 
     num_classes=len(classes),
-    activation=cfg['activation']
+    activation=cfg['activation'],
+    dropout=cfg['dropout']
 )
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)

@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 
-class AlexNet(nn.Module):
+class ChauNet(nn.Module):
     def __init__(self, num_classes, activation='relu', dropout=True):
         super().__init__()
         if activation == 'relu':
@@ -37,23 +37,23 @@ class AlexNet(nn.Module):
             self.classifier = nn.Sequential(
                 nn.Dropout(0.5),
                 
-                nn.Linear(9216, 4096),
+                nn.Linear(9216, 512),
                 self.activate,
                 
-                nn.Linear(4096, 4096),
+                nn.Linear(512, 512),
                 self.activate,
                 
-                nn.Linear(4096, num_classes)
+                nn.Linear(512, num_classes)
             )
         else:
             self.classifier = nn.Sequential(
-                nn.Linear(9216, 4096),
+                nn.Linear(9216, 512),
                 self.activate,
                 
-                nn.Linear(4096, 4096),
+                nn.Linear(512, 512),
                 self.activate,
                 
-                nn.Linear(4096, num_classes)
+                nn.Linear(512, num_classes)
             )
         
     def forward(self, x):
