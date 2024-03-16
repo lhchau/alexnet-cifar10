@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 
-class AlexNet_Minimal(nn.Module):
+class Minimal_Alexnet(nn.Module):
     def __init__(self, num_classes, activation='relu'):
         super().__init__()
         if activation == 'relu':

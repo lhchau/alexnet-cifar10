@@ -1,5 +1,5 @@
 from .alexnet import *
-from .alexnet_minimal import *
+from .minimal_alexnet import *
 
 
 def get_model(
@@ -9,7 +9,7 @@ def get_model(
 ):
     if name == 'alexnet':
         return AlexNet(num_classes=num_classes, activation=activation)
-    elif name =='alexnet_minimal':
-        return AlexNet_Minimal(num_classes=num_classes, activation=activation)
+    elif name =='minimal_alexnet':
+        return Minimal_Alexnet(num_classes=num_classes, activation=activation)
     else:
         raise ValueError("Only support options: alexnet")
