@@ -29,5 +29,9 @@ def get_model(
         return vgg23_bn(num_classes=num_classes, activation=activation)
     elif model_name == 'vgg7_cifar10':
         return vgg7_cifar10_bn(num_classes=num_classes, activation=activation)
+    elif model_name == 'vgg9_cifar10':
+        return vgg9_cifar10_bn(num_classes=num_classes, activation=activation)
+    elif model_name == 'vgg11_cifar10':
+        return vgg11_cifar10_bn(num_classes=num_classes, activation=activation)
     else:
         raise ValueError("Only support options: alexnet")

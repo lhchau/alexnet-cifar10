@@ -12,12 +12,14 @@ import torch
 import torch.nn as nn
 
 cfg = {
-    'A' : [64,     'M', 128,      'M', 256, 256,           'M'] # VGG7 - CIFAR10
+    'A' : [64,     'M', 128,      'M', 256, 256,           'M'], # VGG7 - CIFAR10
+    'B' : [64, 64, 'M', 128, 128, 'M', 256, 256,           'M', 512, 512],
+    'C' : [64, 64, 'M', 128, 128, 'M', 256, 256,           'M', 512, 512,           'M', 512, 512,           'M']
 }
 
 class VGG_CIFAR(nn.Module):
 
-    def __init__(self, features, num_class=10, activation='relu'):
+    def __init__(self, features, num_class=10, activation='relu', cfg=[512, 'M']):
         super().__init__()
         if activation == 'relu':
             self.activate = nn.ReLU(inplace=True)
@@ -31,7 +33,7 @@ class VGG_CIFAR(nn.Module):
         self.feature_extraction = features
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.classifier = nn.Sequential(
-            nn.Linear(256, 512),
+            nn.Linear(cfg[-2], 512),
             self.activate,
             nn.Dropout(),
             nn.Linear(512, 512),
@@ -76,5 +78,10 @@ def make_layers(cfg, batch_norm=False, activation='relu'):
     return nn.Sequential(*layers)
 
 def vgg7_cifar10_bn(num_classes=10, activation='relu'):
-    return VGG_CIFAR(make_layers(cfg['A'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation)
+    return VGG_CIFAR(make_layers(cfg['A'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation, cfg=cfg['A'])
 
+def vgg9_cifar10_bn(num_classes=10, activation='relu'):
+    return VGG_CIFAR(make_layers(cfg['B'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation, cfg=cfg['B'])
+
+def vgg11_cifar10_bn(num_classes=10, activation='relu'):
+    return VGG_CIFAR(make_layers(cfg['C'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation, cfg=cfg['C'])
