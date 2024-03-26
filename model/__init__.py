@@ -2,6 +2,7 @@ from .alexnet import *
 from .minimal_alexnet import *
 from .chaunet import ChauNet
 from .vgg import *
+from .vgg_cifar import *
 
 
 def get_model(
@@ -26,5 +27,7 @@ def get_model(
         return vgg19_bn(num_classes=num_classes, activation=activation)
     elif model_name == 'vgg23':
         return vgg23_bn(num_classes=num_classes, activation=activation)
+    elif model_name == 'vgg7_cifar10':
+        return vgg7_cifar10_bn(num_classes=num_classes, activation=activation)
     else:
         raise ValueError("Only support options: alexnet")

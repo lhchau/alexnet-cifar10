@@ -36,11 +36,11 @@ for key, value in sorted(cfg['model'].items()):
     wandb_name += f'_{key[:2]}={value}'
 for key, value in sorted(cfg['optimizer'].items()):
     wandb_name += f'_{key[:2]}={value}'
-for key, value in sorted(cfg['dataset'].items()):
+for key, value in sorted(cfg['dataloader'].items()):
     wandb_name += f'_{key[:2]}={value}'
     
 wandb.init(
-    project=cfg['dataset']['data_name'], 
+    project=cfg['dataloader']['data_name'], 
     name=wandb_name, 
 )
 log_dict = {}
@@ -49,7 +49,7 @@ test_dict = {}
 ################################
 #### 1. BUILD THE DATASET
 ################################
-train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(**cfg['dataset'])
+train_dataloader, val_dataloader, test_dataloader, classes = get_dataloader(**cfg['dataloader'])
 try:
     num_classes = len(classes)
 except:

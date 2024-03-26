@@ -1,0 +1,15 @@
+trainer:
+  epochs: 200
+dataloader:
+  data_name: 'cifar10'
+  batch_size: 128
+  num_workers: 4
+  data_augmentation: 'minimal'
+model:
+  model_name: 'vgg7_cifar10'
+  activation: 'relu'
+  dropout: False
+optimizer:
+  lr: 0.001
+  momentum: 0.9
+  weight_decay: 0.0
