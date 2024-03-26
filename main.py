@@ -31,9 +31,17 @@ with open(yaml_filepath, "r") as yamlfile:
 
 EPOCHS = cfg['trainer']['epochs']
 
+wandb_name = ''
+for key, value in sorted(cfg['model'].items()):
+    wandb_name += f'_{key[:2]}={value}'
+for key, value in sorted(cfg['optimizer'].items()):
+    wandb_name += f'_{key[:2]}={value}'
+for key, value in sorted(cfg['dataset'].items()):
+    wandb_name += f'_{key[:2]}={value}'
+    
 wandb.init(
     project=cfg['dataset']['data_name'], 
-    name="config_vgg", 
+    name=wandb_name, 
 )
 log_dict = {}
 test_dict = {}
