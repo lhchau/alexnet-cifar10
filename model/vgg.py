@@ -92,5 +92,5 @@ def vgg19_bn(num_classes=10, activation='relu'):
     return VGG(make_layers(cfg['E'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation)
 
 def vgg23_bn(num_classes=10, activation='relu'):
-    return VGG(make_layers(cfg['E'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation)
+    return VGG(make_layers(cfg['F'], batch_norm=True, activation=activation), num_class=num_classes, activation=activation)
 
